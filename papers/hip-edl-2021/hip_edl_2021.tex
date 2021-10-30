@@ -196,11 +196,11 @@ Relative to this theta-phase model, the new Theremin model introduces error-driv
 
 \begin{figure}
   \centering\includegraphics[width=5in]{fig_hip_edl_abac}
-  \caption{\footnotesize AB--AC list learning paradigm diagram and human data reproduced from an empirical experiment \citep{BarnesUnderwood60}. A) The first AB list is traind until memory accuracy reaches 100\% or 15 epochs, whichever is less; the second AC list is then trained to same criterion, while continuing to test AB and AC items.  Detailed procedure is described in Methods. B) Human participants show moderate interference of the AB list after learning the AC list.}
+  \caption{\footnotesize AB--AC list learning paradigm diagram and human data reproduced from an empirical experiment \citep{BarnesUnderwood59}. A) The first AB list is traind until memory accuracy reaches 100\% or 15 epochs, whichever is less; the second AC list is then trained to same criterion, while continuing to test AB and AC items.  Detailed procedure is described in Methods. B) Human participants show moderate interference of the AB list after learning the AC list.}
 \label{fig.abac}
 \end{figure}
 
-The task used in the current study is a standard AB-AC paired-associates list-learning paradigm, widely used to stress interference effects \citep{BarnesUnderwood60,McCloskeyCohen89} (Figure~\ref{fig.abac}). In these paradigms, typically, a participant learns a list of word pairs, with each pair referred to as \emph{A-B}. Once the pairs are learned to a criterion or a fixed number of repetitions, participants learn a new list of \emph{A-C} word pairs, in which the first word in each \emph{A-B} pair is now associated with a new word. Learning of A-C pairs is typically slowed due to competition with previously learned A-B pairs (\emph{proactive interference}), and once the A-C pairs are learned, retention of A-B pairs is reduced (\emph{retroactive interference}).
+The task used in the current study is a standard AB-AC paired-associates list-learning paradigm, widely used to stress interference effects \citep{BarnesUnderwood59,McCloskeyCohen89} (Figure~\ref{fig.abac}). In these paradigms, typically, a participant learns a list of word pairs, with each pair referred to as \emph{A-B}. Once the pairs are learned to a criterion or a fixed number of repetitions, participants learn a new list of \emph{A-C} word pairs, in which the first word in each \emph{A-B} pair is now associated with a new word. Learning of A-C pairs is typically slowed due to competition with previously learned A-B pairs (\emph{proactive interference}), and once the A-C pairs are learned, retention of A-B pairs is reduced (\emph{retroactive interference}).
 
 To simulate the AB--AC paradigm, each pair of A and B items (unique random bit patterns in the model) was trained, and then tested by probing with the A item and testing for recall of the associated B item.  A list context representation was also present during training and testing, to distinguish the AB vs. AC list.  Once recall accuracy for all AB pairs reached 100\%, or 15 epochs of the whole AB list have been trained, the model switched to learn the AC list, where previously learned A items were paired with novel C items and AC list context. Similarly, if memory for all AC pairs reached 100\%, or 30 epochs have been trained in total, that run was considered complete.  We ran 30 different simulated subjects (i.e., runs) on each configuration and set of parameters, with each such subject having a different set of random initial synaptic weights. 
 
@@ -208,7 +208,7 @@ There are several central questions that we address in turn.  First, we compared
 
 Next, we tested different parameterizations of the Theremin model, to determine the specific contributions of: 1) error-driven learning specifically in the CA3, compared to Hebbian learning in this pathway, with everything else the same; 2) reduced MF strength during testing (cued recall); 3) the balance of weight decreases vs. increases in the ECin $\rightarrow$ DG projections; 4) the effect of pretraining on the monosynaptic pathway between EC and CA1, which simulates the accumulated learning in CA1 about the semantics of EC representations, reflecting in turn the slower learning of cortical representations. In other words, human participants have extensive real life experience of knowing the A/B/C list items, enabling the CA1 to already be able to invertably reconstruct the corresponding EC patterns for them, and pretraining captures this prior learning.  Pretraining has relatively moderate benefits for the Theremin model, and was used by default outside of this specific test.  The pretraining process involved turning DG and CA3 off, while training the model with items and context separately only in the monosynaptic EC $\leftrightarrow$ CA1 pathway for 5 epochs. 
 
-The learning capacity of a model is proportional to its size, so we tested a set of three network sizes (small, medium, large, see Appendix for detailed parameters) to determine the relationship between size and capacity in each case.  The list sizes ranged from 20 to 100 pairs of AB--AC associations (for comparison, \citet{BarnesUnderwood60} used 8 pairs of nonsense syllables).  For the basic performance tests, the two dependent variables were NEpochs and ABmem.  NEpochs measures the total number of epochs used to finish one full run through AB and AC lists, which measures the overall speed of learning (capped at 30 if the network failed to learn). ABmem is the memory for AB pairs after learning the AC list, thus representing the models' ability to resist interference.
+The learning capacity of a model is proportional to its size, so we tested a set of three network sizes (small, medium, large, see Appendix for detailed parameters) to determine the relationship between size and capacity in each case.  The list sizes ranged from 20 to 100 pairs of AB--AC associations (for comparison, \citet{BarnesUnderwood59} used 8 pairs of nonsense syllables).  For the basic performance tests, the two dependent variables were NEpochs and ABmem.  NEpochs measures the total number of epochs used to finish one full run through AB and AC lists, which measures the overall speed of learning (capped at 30 if the network failed to learn). ABmem is the memory for AB pairs after learning the AC list, thus representing the models' ability to resist interference.
 
 In addition to these performance tests, we ran representational analyses on different network layers (i.e., hippocampal subregions) over the course of learning.  This enabled us to directly measure the temporal difference error signals that drove learning in Theremin, and how representations evolved through learning.  Furthermore, by comparing across differences in learning algorithm and other parameters, we can directly understand the overall performance differences.  The main analytic tool here is to compute cycle-by-cycle correlations between the activity patterns present at that cycle and the patterns present at the end of a trial of processing (100 cycles), which provides a simple 1-dimensional summary of the high-dimensional layer activation patterns as they evolve over time.
 
@@ -323,25 +323,25 @@ In this appendix we provide some of the key parameters to understanding how the 
 \hline
 \diagbox{Parameter}{Network Size} & Small & Medium & Large \\
 \hline
-Input Pool Size & 7×7 & 7×7 & 7×7 \\
+Input Pool Size & 7x7 & 7x7 & 7x7 \\
 \hline
-Input Number of Pools & 2×3 & 2×3 & 2×3 \\
+Input Number of Pools & 2x3 & 2x3 & 2x3 \\
 \hline
-ECin Pool Size & 7×7 & 7×7 & 7×7 \\
+ECin Pool Size & 7x7 & 7x7 & 7x7 \\
 \hline
-ECin Number of Pools & 2×3 & 2×3 & 2×3 \\
+ECin Number of Pools & 2x3 & 2x3 & 2x3 \\
 \hline
-ECout Pool Size & 7×7 & 7×7 & 7×7 \\
+ECout Pool Size & 7x7 & 7x7 & 7x7 \\
 \hline
-ECout Number of Pools & 2×3 & 2×3 & 2×3 \\
+ECout Number of Pools & 2x3 & 2x3 & 2x3 \\
 \hline
-DG Size & 44×44 & 67×67 & 89×89 \\
+DG Size & 44x44 & 67x67 & 89x89 \\
 \hline
-CA3 Size & 20×20 & 30×30 & 40×40 \\
+CA3 Size & 20x20 & 30x30 & 40x40 \\
 \hline
-CA1 Pool Size & 10×10 & 15×15 & 20×20 \\
+CA1 Pool Size & 10x10 & 15x15 & 20x20 \\
 \hline
-CA1 Number of Pools & 2×3 & 2×3 & 2×3 \\
+CA1 Number of Pools & 2x3 & 2x3 & 2x3 \\
 \hline
 \end{tabular}
 \caption{Parameters for network sizes.  In neural networks, larger network size usually leads to higher capacity, when controlled for other settings.  In the current study, we tested different variations of the hippocampus model for three different network sizes to show the benefit of error-driven learning for hippocampus regardless of sizes, meaning the mechanism is generalizable.  For pool sizes, the numbers in the table refer to number of neurons in that specific pool.  Note: DG size is around five times CA3 size as specified in our previous model \citep{KetzMorkondaOReilly13}}
@@ -377,7 +377,7 @@ A & empty \\
 \caption{Testing phase patterns for network input.  Each unit here represents a pool in the Input layer.  Memory of AB and AC pairs are categorized into different experiences, with four different context pools for each experience.  During testing, no input is given for the B/C pool, while A and context pools are used as partial cues for the hippocampus to do pattern completion (i.e., complete the pattern for the B/C pool).} 
 \end{table}
 
-%\bibliography{ccnlab}
+% \bibliography{ccnlab}
 % use: bibexport -o hip_edl.bib hip_edl_2021.aux to regenerate:
 \bibliography{hip_edl}
 
