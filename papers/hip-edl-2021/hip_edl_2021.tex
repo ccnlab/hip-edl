@@ -291,9 +291,11 @@ By incorporating biologically plausible error-driven learning mechanisms at the 
 
 Although we have provocatively characterized Hebbian learning as a mistake in order to highlight the error-correction nature of our alternative hypothesis, we nevertheless recognize that extensive research and modeling has productively leveraged the Hebbian principle to understand hippocampal function.  Indeed, we have shown that the error-driven learning achieves much of the same overall learning objective, just through different means that improve learning performance and reduce interference.  As emphasized above, this interference is not a result of using a simplistic form of Hebbian learning without appropriate normalization and bounding --- the key failing of Hebbian learning that error-driven learning corrects is that it is purely local and autonomous and is not sensitive to an overall objective function that can determine when learning has accomplished its objective.  In addition, there are various other lines of research about non-Hebbian learning in the hippocampus that should be acknowledged, and future work can investigate further \citep{RebolaCartaMulle17,Jackson20,PandaRoy17,ChistiakovaBannonBazhenovEtAl14,TsukamotoYasuiYamadaEtAl03}.
 
-Another contribution of the current model is to test several computationally-motivated mechanisms that improve overall performance, and could plausibly be implemented in the hippocampal biology. First, decreasing the DG $\rightarrow$ CA3 strength during recall improves performance, because the DG otherwise biases more strongly toward pattern separation rather than the pattern completion needed for recall \citep{OReillyMcClelland94,KunecHasselmoKopell05}. We also found entirely eliminating the MF projections during testing significantly harms memory recall (data not shown).  These findings are consistent with data and models showing that MF projections are not necessarily needed during recall \citep{NakashibaCushmanPelkeyEtAl12,BernierLacagninaAyoubEtAl17,Rolls13}, but may help increasing recall precision \citep{RuedigerVittoriBednarekEtAl11,NakashibaCushmanPelkeyEtAl12,BernierLacagninaAyoubEtAl17,PignatelliRyanRoyEtAl19}.  Second, as opposed to the intuitive idea that the DG naturally forms highly separated patterns, learning in ECin $\rightarrow$ DG pathway is important for overall performance.  Furthermore, favoring of LTD over long-term potentiation (LTP) in this pathway is beneficial as it forces DG to form sparse representations, suggesting that learning overall is helping with the DG pattern separation dynamics.  This echos with the idea that homeostatic synaptic plasticity at this pathway helps convey the most favored patterns \citep{Hsu07}.  Finally, by doing pretraining, prior semantic knowledge in the CA1 area benefits subsequent learning and memory.  Although our previous model without all of these improvements was sufficient for simulating smaller-scale one-off experiments, the significantly improved capacity of the present model opens up the potential to examine longer time-scale learning contributions of the hippocampus, and other larger-scale datasets as emphasized in \citet{KowadloAhmedRawlinson20}.
+Another contribution of the current model is to test several computationally-motivated mechanisms that improve overall performance, and could plausibly be implemented in the hippocampal biology. First, decreasing the DG $\rightarrow$ CA3 strength during recall improves performance, because the DG otherwise biases more strongly toward pattern separation rather than the pattern completion needed for recall \citep{OReillyMcClelland94,KunecHasselmoKopell05}. In addition, entirely eliminating the MF projections during testing actually harms memory recall (data not shown).  These findings are consistent with data and models showing that MF projections are not necessarily needed during recall \citep{NakashibaCushmanPelkeyEtAl12,BernierLacagninaAyoubEtAl17,Rolls13}, but may help increasing recall precision \citep{RuedigerVittoriBednarekEtAl11,NakashibaCushmanPelkeyEtAl12,BernierLacagninaAyoubEtAl17,PignatelliRyanRoyEtAl19}.  Consistent with this perspective and the contribution of DG to recall performance (going beyond its widely-discussed pattern-separation contributions), we found that learning in the ECin $\rightarrow$ DG pathway is important for overall performance.  Furthermore, favoring of LTD over long-term potentiation (LTP) in this pathway is beneficial as it forces DG to form sparse representations, suggesting that learning overall is helping with the DG pattern separation dynamics.  This echos with the idea that homeostatic synaptic plasticity at this pathway helps convey the most favored patterns \citep{Hsu07}.
 
-The Theremin model retains the major tenets of the Hebb-Marr paradigm based on rapid episodic learning, while incorporating error-driven learning to optimize the learning capacity of the system relative to the predominant use of Hebbian learning in other models.  In the following subsections, we consider other theoretical models of the hippocampus that can usefully be compared with the present model, including a number of widely-cited theories that postulate some form of error-signaling or error-driven learning.  At the heart of many of these models is the idea that the hippocampus can generate predictions in order to then compute a novelty or error signal relative to such predictions, or to learn and predict sequences of future states. After briefly summarizing these models, we discuss what roles the hippocampus and the neocortex play in generating predictions according to the complementary learning systems (CLS) framework in which the current model is based \citep{McClellandMcNaughtonOReilly95,OReillyBhattacharyyaHowardEtAl14,OReillyRanganathRussin21}.  
+Finally, by doing pretraining, prior semantic knowledge in the CA1 area benefits subsequent learning and memory.  Although our previous model without all of these improvements was sufficient for simulating smaller-scale one-off experiments, the significantly improved capacity of the present model opens up the potential to examine longer time-scale learning contributions of the hippocampus, and other larger-scale datasets as emphasized in \citet{KowadloAhmedRawlinson20}.
+
+Overall, the Theremin model retains the major tenets of the Hebb-Marr paradigm based on rapid episodic learning, while incorporating error-driven learning to optimize the learning capacity of the system relative to the predominant use of Hebbian learning in other models.  In the following subsections, we consider other theoretical models of the hippocampus that can usefully be compared with the present model, including a number of widely-cited theories that postulate some form of error-signaling or error-driven learning.  At the heart of many of these models is the idea that the hippocampus can generate predictions in order to then compute a novelty or error signal relative to such predictions, or to learn and predict sequences of future states. After briefly summarizing these models, we discuss what roles the hippocampus and the neocortex play in generating predictions according to the complementary learning systems (CLS) framework in which the current model is based \citep{McClellandMcNaughtonOReilly95,OReillyBhattacharyyaHowardEtAl14,OReillyRanganathRussin21}.  
 
 \subsection{Prediction-based Models of the Hippocampus}
 
@@ -676,6 +678,38 @@ The following shows the main equations used to simulate neural activity and lear
       reset weight changes now that they have been applied.
     \end{itemize}
 \end{itemize}
+
+\begin{table}[hbt!]
+\begin{tabular}{|l|l|r|r|}
+\hline
+Area & Param & Value & Default \\
+\hline \hline
+ECin & Inhib.Pool.Gi & 2 & 1.8 \\
+\hline
+ECout & Inhib.Pool.Gi & 2 & 1.8 \\
+\hline
+ECout & CA1ToECout.WtScale.Abs & 4 & 1 \\
+\hline
+CA1 & Inhib.Pool.Gi & 2.4  & 1.8  \\
+\hline
+CA1 & CA3ToCA1.CHL.Hebb & 0.01 & 0.001 \\
+\hline
+DG & Inhib.Layer.Gi & 3.8 & 1.8 \\
+\hline
+DG & ECinToDG.CHL.Hebb & 0.2 & 0.001 \\
+\hline
+DG & ECinToDG.CHL.SAvgCor & 0.1 & 0.4 \\
+\hline
+CA3 & Inhib.Layer.Gi & 2.8 & 1.8 \\
+\hline
+CA3 & DGToCA3.CHL.Hebb & 0.01 & 0.001 \\
+\hline
+\end{tabular}
+\caption{Non-default parameters used in the model, with default shown.  All other params are at default values.}
+\label{tab.ndefparams}
+\end{table}
+
+\newpage
 
 % \bibliography{ccnlab}
 % use: bibexport -o hip_edl.bib hip_edl_2021.aux to regenerate:
