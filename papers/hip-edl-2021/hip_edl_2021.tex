@@ -29,6 +29,9 @@
 % \input netsym
 \usepackage{diagbox} % table
 
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{.25in}\setlength{\parskip}{-.25in}}
+
 % tell pdflatex to prefer .pdf files over .png files!!
 \myifpdf
   \DeclareGraphicsExtensions{.pdf,.eps,.png,.jpg,.mps,.tif}
@@ -140,7 +143,7 @@ The differential modulation of the pathway strengths as shown in Figure~\ref{fig
 \label{eq.ECoutEDL}
     dW_{i,j} = \mbox{CA1}_i ( \mbox{ECout}_j^{ECin} - \mbox{ECout}_j^{CA1} ) ,
 \end{equation}
-where $\mbox{ECout}_j^{CA1}$ represents the activity of the neuron $j$ in the ECout layer driven more strongly by its CA1 afferents (earlier in the theta cycle), and $\mbox{ECout}_j^{ECin}$ represents the state when driven more strongly by the ECin afferents, at the end of the theta cycle (Figure~\ref{fig.theremin}).  If these activities are identical, then the error is 0, and no learning occurs (i.e., $\mbox{dW}_{i,j} = 0$), and any learning that does occur is directly in proportion to the extent of error correction required, to get the CA1 to ECout pathway to more accurately reproduce the content of the ECin information.  Biologically, there are relatively focal ``columnar'' projections from the superficial (ECin) to deep (ECout) layers of EC, consistent with cortical anatomical organization in general \citep{TODO:MennoPapers}, and in our model, we just use direct fixed one-to-one connections so that ECout literally mirrors the organization of ECin, but any information preserving connectivity pathway here would function similarly.
+where $\mbox{ECout}_j^{CA1}$ represents the activity of the neuron $j$ in the ECout layer driven more strongly by its CA1 afferents (earlier in the theta cycle), and $\mbox{ECout}_j^{ECin}$ represents the state when driven more strongly by the ECin afferents, at the end of the theta cycle (Figure~\ref{fig.theremin}).  If these activities are identical, then the error is 0, and no learning occurs (i.e., $\mbox{dW}_{i,j} = 0$), and any learning that does occur is directly in proportion to the extent of error correction required, to get the CA1 to ECout pathway to more accurately reproduce the content of the ECin information.  Biologically, there are relatively focal ``columnar'' projections from the superficial (ECin) to deep (ECout) layers of EC, consistent with cortical anatomical organization in general \citep{WitterDoanJacobsenEtAl17}, and in our model, we just use direct fixed one-to-one connections so that ECout literally mirrors the organization of ECin, but any information preserving connectivity pathway here would function similarly.
 
 This error-driven learning mechanism also applies to the pathways of ECin $\rightarrow$ CA1 and ECout $\rightarrow$ CA1, by virtue of the differential influence of the ECin, ECout $\rightarrow$ CA1 pathways on activity of the CA1 neurons across the theta cycle.  For example, CA1 receives from both the CA3 and the EC layers, and the differential strength of these pathways creates different CA1 activity states across the theta cycle, similar to equation~\ref{eq.ECoutEDL}:
 \begin{equation}
@@ -178,8 +181,6 @@ Finally, we tested a range of different learning rates for all of the pathways i
 
 Next, we describe our computational implementation within the existing \citet{KetzMorkondaOReilly13} framework, and then present the results of a systematic large-scale parameter search of all relevant parameters in the model, to determine the overall best-performing configuration of the new model. 
 
-% ror: here
-
 \section{Methods}
 
 \subsection{Hippocampal Architecture}
@@ -196,9 +197,9 @@ In the monosynaptic pathway, ECin (superficial) layers project to CA1, which the
 
 Unlike the broad and diffuse PP projections, the EC $\leftrightarrow$ CA1 connections obey the pool-wise organization of EC, consistent with the focal, point-to-point nature of the EC $\leftrightarrow$ CA1 projections \citep{WitterDoanJacobsenEtAl17}.  Thus, each pool is separately auto-encoding the specific, specialized information associated with a given cortical area, which enables these connections to slowly learn the systematic ``language'' of that area.  The entire episodic memory is thus the distributed pattern across all of these pools, but the monosynaptic pathway only sees a systematic subset, which it can efficiently and systematically auto-encode.
 
-The purpose of the theta-phase error-driven learning in the \citet{KetzMorkondaOReilly13} model is to shape these synaptic weights to support this systematic auto-encoding of information within the monosynaptic pathway.  Specifically, CA1 patterns at peaks and troughs of theta cycles come from CA3-retrieved memory and ECin inputs, respectively.  As shown in eq.(\ref{eq.ECoutEDL}) above, the target plus-phase activation comes from the ECout being strongly driven by the ECin superficial patterns, in contrast to the minus phase where ECout is being driven directly by CA1.  Thus, over iterations of learning, this error-driven mechanism shapes synapses so that the CA1 projection to ECout will replicate the corresponding pattern on ECin.
+The purpose of the theta-phase error-driven learning in the \citet{KetzMorkondaOReilly13} model is to shape these synaptic weights to support this systematic auto-encoding of information within the monosynaptic pathway.  Specifically, CA1 patterns at peaks and troughs of theta cycles come from CA3-retrieved memory and ECin inputs, respectively.  As shown in equation~\ref{eq.ECoutEDL}) above, the target plus-phase activation comes from the ECout being strongly driven by the ECin superficial patterns, in contrast to the minus phase where ECout is being driven directly by CA1.  Thus, over iterations of learning, this error-driven mechanism shapes synapses so that the CA1 projection to ECout will replicate the corresponding pattern on ECin.
 
-Relative to this theta-phase model, the new Theremin model introduces error-driven learning in the CA3, using eq.(\ref{eq.CA3EDL}) as shown above, which was achieved by delaying the output of DG $\rightarrow$ CA3 until the second quarter (Figure~\ref{fig.theremin}).  Although it only takes $\sim$10 ms for signals to propagate from ECin to DG to CA3, and $\sim$5 ms from ECin to CA3 monosynaptically, fully activated CA3 patterns does not show up until $\sim$50 ms (equivalent to a quarter of a 200 ms theta cycle as modeled here; \citealp{NakagamiSaitoMatsuki97}).  Thus, the plus phase (the fourth quarter) represents the CA3 activity in the presence of these strong DG inputs, while the minus phase (the first quarter) is the activity prior to the activation of these inputs.  In addition, as noted earlier, we tested the effects of reducing the strength of MF inputs to CA3 during recall testing, along with testing all other relevant parameters in a massive grid search.
+Relative to this theta-phase model, the new Theremin model introduces error-driven learning in the CA3, using equation~\ref{eq.CA3EDL} as shown above, which was achieved by delaying the output of DG $\rightarrow$ CA3 until the second quarter (Figure~\ref{fig.theremin}).  Although it only takes $\sim$10 ms for signals to propagate from ECin to DG to CA3 in the rodent hippocampus, and $\sim$5 ms from ECin to CA3 monosynaptically, fully activated CA3 patterns do not show up until $\sim$50 ms (equivalent to a quarter of a 200 ms theta cycle as modeled here; \citealp{NakagamiSaitoMatsuki97}).  Thus, the plus phase (the fourth quarter) represents the CA3 activity in the presence of these strong DG inputs, while the minus phase (the first quarter) is the activity prior to the activation of these inputs.  In addition, as noted earlier, we tested the effects of reducing the strength of MF inputs to CA3 during recall testing, along with testing all other relevant parameters in a massive grid search.
 
 \subsection{Model Testing}
 
@@ -216,7 +217,7 @@ There are several central questions that we address in turn.  First, we compared
 
 Next, we tested different parameterizations of the Theremin model, to determine the specific contributions of: 1) adding error-driven learning in the CA3, compared to Hebbian learning in this pathway, with everything else the same (NoEDL variant); 2) reduced MF $\rightarrow$ CA3 strength during testing (cued recall, NoDynMF variant); 3) the balance of weight decreases vs. increases in the ECin $\rightarrow$ DG projections; 4) ECin $\rightarrow$ DG Hebbian learning, compared to no learning (NoDGLearn variant); 5) the effect of pretraining on the monosynaptic pathway between EC and CA1 (NoPretrain variant), which simulates the accumulated learning in CA1 about the semantics of EC representations, reflecting in turn the slower learning of cortical representations. In other words, human participants have extensive real life experience of knowing the A/B/C list items, enabling the CA1 to already be able to invertably reconstruct the corresponding EC patterns for them, and pretraining captures this prior learning.  Pretraining has relatively moderate benefits for the Theremin model, and was used by default outside of this specific test.  The pretraining process involved turning DG and CA3 off, while training the model with items and context separately only in the monosynaptic EC $\leftrightarrow$ CA1 pathway for 5 epochs. 
 
-The learning capacity of a model is proportional to its size, so we tested a set of three network sizes (small, medium, large, see Appendix for detailed parameters) to determine the relationship between size and capacity in each case.  The list sizes ranged from 20 to 100 pairs of AB--AC associations (for comparison, \citet{BarnesUnderwood59} used 8 pairs of nonsense syllables).  For the basic performance tests, the two dependent variables were N and M.  N measures the total number of epochs used to finish one full run through AB and AC lists, which measures the overall speed of learning (capped at 30 if the network failed to learn). M is the memory for AB pairs after learning the AC list, thus representing the models' ability to resist interference.
+The learning capacity of a model is proportional to its size, so we tested a set of three network sizes (small, medium, large, see Appendix for detailed parameters) to determine the relationship between size and capacity in each case.  The list sizes ranged from 20 to 100 pairs of AB--AC associations (for comparison, \citet{BarnesUnderwood59} used 8 pairs of nonsense syllables).  For the basic performance tests, the two dependent variables were \emph{number of epochs, N} and \emph{residual AB memory, M}.  $N$ measures the total number of epochs used to finish one full run through AB and AC lists, which measures the overall speed of learning (capped at 30 if the network failed to learn). $M$ is the memory for AB pairs after learning the AC list, thus representing the models' ability to resist interference.
 
 In addition to these performance tests, we ran representational analyses on different network layers (i.e., hippocampal subregions) over the course of learning.  This enabled us to directly measure the temporal difference error signals that drove learning in Theremin, and how representations evolved through learning.  Furthermore, by comparing across differences in learning algorithm and other parameters, we can directly understand the overall performance differences.  The main analytic tool here is to compute cycle-by-cycle correlations between the activity patterns present at that cycle and the patterns present at the end of a trial of processing (100 cycles), which provides a simple 1-dimensional summary of the high-dimensional layer activation patterns as they evolve over time.
 
@@ -339,8 +340,6 @@ In summary, results from our simulations show that error-driven learning mechani
 
 In this appendix we provide some of the key parameters to understanding how the Theremin model is structured, and organized to do the AB-AC memory task.  See table captions for detailed descriptions on parameters/diagrams.  The best documentation for those interested in all the details is the fully-functioning Theremin model along with further detailed documentation, available at: \url{https://github.com/ccnlab/hip-edl}.   
 
-\FloatBarrier
-\subsection{Network Size Parameters}
 \begin{table}[hbt!]
 \begin{tabular}{|l|c|c|c|}
 \hline
@@ -368,16 +367,16 @@ CA1 Number of Pools & 2x3 & 2x3 & 2x3 \\
 \hline
 \end{tabular}
 \caption{Parameters for network sizes.  In neural networks, larger network size usually leads to higher capacity, when controlled for other settings.  In the current study, we tested different variations of the hippocampus model for three different network sizes to show the benefit of error-driven learning for hippocampus regardless of sizes, meaning the mechanism is generalizable.  For pool sizes, the numbers in the table refer to number of neurons in that specific pool.  Note: DG size is around five times CA3 size as specified in our previous model \citep{KetzMorkondaOReilly13}}
+\label{tab.netsize}
 \end{table}
 
-\FloatBarrier
-\subsection{Training/Testing Input Diagram}
 \begin{figure}
   \centering\includegraphics[width=4in]{fig_hip_edl_example_patterns}
   \caption{\footnotesize Training and testing example patterns for network input.  Each input pattern has 6 pools, composed of 2 item pools (i.e., A, B, or C) and 4 list context pools -- memory of AB and AC pairs are categorized into different experiences, with four different context pools for each experience.}
 \label{fig.example_pattern}
 \end{figure}
 
+Table~\ref{tab.netsize} shows the specific layer sizes associated with the small, medium, and large networks, and Figure~\ref{fig.example_pattern} shows an example of training and testing patterns representing pools of EC layer activations.
 
 % \begin{table}[hbt!]
 % \begin{tabular}{|c|c|}
@@ -407,8 +406,276 @@ CA1 Number of Pools & 2x3 & 2x3 & 2x3 \\
 % \caption{Testing phase patterns for network input.  Each unit here represents a pool in the Input layer.  Memory of AB and AC pairs are categorized into different experiences, with four different context pools for each experience.  During testing, no input is given for the B/C pool, while A and context pools are used as partial cues for the hippocampus to do pattern completion (i.e., complete the pattern for the B/C pool).} 
 % \end{table}
 
-\bibliography{ccnlab}
+\subsection{Implementational Details}
+
+The model was implemented using the Leabra framework, which is described in detail in these sources: \url{https://github.com/emer/leabra} \citet{OReillyMunakataFrankEtAl12}, \citet{OReillyMunakata00}, and summarized here.  These same equations and default parameters have been used to simulate over 40 different models in \citet{OReillyMunakataFrankEtAl12} and \citet{OReillyMunakata00}, and a number of other research models.  Thus, the model can be viewed as an instantiation of a systematic modeling framework using standardized mechanisms, instead of constructing new mechanisms for each model.
+
+The basic activation dynamics are based on standard electrophysiological principles of real neurons, as captured by the AdEx (adapting exponential) model of Gerstner and colleagues \citep{BretteGerstner05}, using a rate code approximation that produces a graded activation signal matching the actual instantaneous rate of spiking across a population of AdEx neurons.  We generally conceive of a single rate-code neuron as representing a microcolumn of roughly 100 spiking pyramidal neurons in the neocortex.
+ 
+The excitatory synaptic input conductances (i.e., net input) is computed as an average, not a sum, over connections, based on normalized, sigmoidaly transformed weight values, which are subject to scaling on a projection level to alter relative contributions. Automatic scaling is performed to compensate for differences in expected activity level in the different projections.
+
+Inhibition is computed using a feed-forward (FF) and feed-back (FB) inhibition function (FFFB) that closely approximates the behavior of inhibitory interneurons in the neocortex. FF is based on a multiplicative factor applied to the average net input coming into a layer, and FB is based on a multiplicative factor applied to the average activation within the layer. These simple linear functions do an excellent job of controlling the overall activation levels in bidirectionally connected networks, producing behavior very similar to the more abstract computational implementation of kWTA dynamics implemented in previous versions.
+
+There is a single learning equation, derived from a detailed model of spike timing dependent plasticity (STDP) by \citet{UrakuboHondaFroemkeEtAl08}, that produces a combination of Hebbian associative and error-driven learning. For historical reasons, we call this the XCAL equation (eXtended Contrastive Attractor Learning), and it is functionally very similar to the BCM learning rule developed by \citet{BienenstockCooperMunro82}. The essential learning dynamic involves a Hebbian co-product of sending neuron activation times receiving neuron activation, which biologically reflects the amount of calcium entering through NMDA channels, and this co-product is then compared against a floating threshold value. To produce the Hebbian learning dynamic, this floating threshold is based on a long-term running average of the receiving neuron activation. This is the key idea for the BCM algorithm. To produce error-driven learning, the floating threshold is based on a much faster running average of activation co-products, which reflects an expectation or prediction, against which the instantaneous, later outcome is compared.
+
+Weights are subject to a contrast enhancement function, which compensates for the soft (exponential) weight bounding that keeps weights within the normalized 0-1 range. Contrast enhancement is important for enhancing the selectivity of self-organizing learning, and generally results in faster learning with better overall results. Learning operates on the underlying internal linear weight value. Biologically, we associate the underlying linear weight value with internal synaptic factors such as actin scaffolding, CaMKII phosphorlation level, etc, while the contrast enhancement operates at the level of AMPA receptor expression. 
+
+\subsubsection{Activation Equations}
+
+\begin{itemize}
+  \item \texttt{GeRaw\ +=\ Sum\_(recv)\ Prjn.GScale\ *\ Send.Act\ *\ Wt}
+    \begin{itemize}
+	\tightlist
+    \item
+      \texttt{Prjn.GScale} is the Input Scaling factor that
+      includes 1/N to compute an average, and the \texttt{WtScaleParams}
+      \texttt{Abs} absolute scaling and \texttt{Rel} relative scaling,
+      which allow one to easily modulate the overall strength of
+      different input projections.
+    \end{itemize}
+	
+  \item \texttt{Ge\ +=\ (1/\ DtParams.GTau)\ *\ (GeRaw\ -\ Ge)}
+    \begin{itemize}
+	\tightlist
+    \item
+      This does a time integration of excitatory conductance,
+      \texttt{GTau\ =\ 1.4} default for 1 msec default cycle.
+    \end{itemize}
+	
+  \item \texttt{ffi\ =\ FFFBParams.FF\ *\ MAX(avgGe\ -\ FFBParams.FF0,\ 0)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      feedforward component of inhibition with FF multiplier (1 by
+      default) -\/- has FF0 offset and can't be negative (that's what
+      the MAX(.. ,0) part does).
+    \item
+      \texttt{avgGe} is average of Ge variable across relevant Pool of
+      neurons, depending on what level this is being computed at, and
+      \texttt{maxGe} is max of Ge across Pool
+    \end{itemize}
+
+  \item \texttt{fbi\ +=\ (1\ /\ FFFBParams.FBTau)\ *\ (FFFBParams.FB\ *\ avgAct\ -\ fbi)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      feedback component of inhibition with FB multiplier (1 by default)
+      -\/- requires time integration to dampen oscillations that
+      otherwise occur -\/- FBTau = 1.4 default.
+    \end{itemize}
+	
+  \item \texttt{Gi\ =\ FFFBParams.Gi\ *\ (ffi\ +\ fbi)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      total inhibitory conductance, with global Gi multiplier -\/-
+      default of 1.8 typically produces good sparse distributed
+      representations in reasonably large layers (25 units or more).
+    \end{itemize}
+	
+  \item \texttt{geThr\ =\ (Gi\ *\ (Erev.I\ -\ Thr)\ +\ Gbar.L\ *\ (Erev.L\ -\ Thr)\ /\ (Thr\ -\ Erev.E)}
+
+  \item \texttt{nwAct\ =\ NoisyXX1(Ge\ *\ Gbar.E\ -\ geThr)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      geThr = amount of excitatory conductance required to put the
+      neuron exactly at the firing threshold, \texttt{XX1Params.Thr} =
+      .5 default, and NoisyXX1 is the x / (x+1) function convolved with
+      gaussian noise kernel, where x = \texttt{XX1Parms.Gain * (Ge - geThr)} and Gain is 100 by default
+    \end{itemize}
+	
+  \item \texttt{Act\ +=\ (1\ /\ DTParams.VmTau)\ *\ (nwAct\ -\ Act)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      time-integration of the activation, using same time constant as Vm
+      integration (VmTau = 3.3 default)
+    \end{itemize}
+	
+  \item \texttt{Vm\ +=\ (1\ /\ DTParams.VmTau)\ *\ Inet}
+
+  \item \texttt{Inet\ =\ Ge\ *\ (Erev.E\ -\ Vm)\ +\ Gbar.L\ *\ (Erev.L\ -\ Vm)\ +\ Gi\ *\ (Erev.I\ -\ Vm)\ +\ Noise}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      Membrane potential computed from net current via standard RC model
+      of membrane potential integration. In practice we use normalized
+      Erev reversal potentials and Gbar max conductances, derived from
+      biophysical values: Erev.E = 1, .L = 0.3, .I = 0.25, Gbar's are
+      all 1 except Gbar.L = .2 default.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Learning Equations}
+
+\begin{itemize}
+	
+  \item \texttt{AvgSS\ +=\ (1\ /\ SSTau)\ *\ (Act\ -\ AvgSS)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      super-short time scale running average, SSTau = 2 default, which is first pass of sequence of running-average integrations of activity that drive temporal-difference learning.
+    \end{itemize}
+	
+  \item \texttt{AvgS\ +=\ (1\ /\ STau)\ *\ (AvgSS\ -\ AvgS)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      short time scale running average, STau = 2 default -\/- this
+      represents the \emph{plus phase} or actual outcome signal in
+      comparison to AvgM
+    \end{itemize}
+	
+  \item \texttt{AvgM\ +=\ (1\ /\ MTau)\ *\ (AvgS\ -\ AvgM)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      medium time-scale running average, MTau = 10 -\/- this represents
+      the \emph{minus phase} or expectation signal in comparison to AvgS
+    \end{itemize}
+	
+  \item \texttt{AvgL\ +=\ (1\ /\ Tau)\ *\ (Gain\ *\ AvgM\ -\ AvgL);\ AvgL\ =\ MAX(AvgL,\ Min)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      long-term running average -\/- this is computed just once per
+      learning trial, \emph{not every cycle} like the ones above -\/-
+      params on \texttt{AvgLParams}: Tau = 10, Gain = 2.5 (this is a key
+      param -\/- best value can be lower or higher) Min = .2
+    \end{itemize}
+	
+  \item \texttt{AvgLLrn\ =\ ((Max\ -\ Min)\ /\ (Gain\ -\ Min))\ *\ (AvgL\ -\ Min)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      learning strength factor for how much to learn based on AvgL
+      floating threshold -\/- this is dynamically modulated by strength
+      of AvgL itself, and this turns out to be critical -\/- the amount
+      of this learning increases as units are more consistently active
+      all the time (i.e., "hog" units). Params on \texttt{AvgLParams},
+      Min = 0.0001, Max = 0.5. Note that this depends on having a clear
+      max to AvgL, which is an advantage of the exponential
+      running-average form above.
+    \end{itemize}
+	
+  \item \texttt{AvgLLrn\ *=\ MAX(1\ -\ layCosDiffAvg,\ ModMin)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      also modulate by time-averaged cosine (normalized dot product)
+      between minus and plus phase activation states in given receiving
+      layer (layCosDiffAvg), (time constant 100) -\/- if error signals
+      are small in a given layer, then Hebbian learning should also be
+      relatively weak so that it doesn't overpower it -\/- and
+      conversely, layers with higher levels of error signals can handle
+      (and benefit from) more Hebbian learning. The MAX(ModMin) (ModMin
+      = .01) factor ensures that there is a minimum level of .01 Hebbian
+      (multiplying the previously-computed factor above). The .01 * .05
+      factors give an upper-level value of .0005 to use for a fixed
+      constant AvgLLrn value -\/- just slightly less than this (.0004)
+      seems to work best if not using these adaptive factors.
+    \end{itemize}
+	
+  \item \texttt{AvgSLrn\ =\ (1-LrnM)\ *\ AvgS\ +\ LrnM\ *\ AvgM}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      mix in some of the medium-term factor into the short-term factor
+      -\/- this is important for ensuring that when neuron turns off in
+      the plus phase (short term), that enough trace of earlier
+      minus-phase activation remains to drive it into the LTD weight
+      decrease region -\/- LrnM = .1 default.
+    \end{itemize}
+	
+  \item \texttt{srs\ =\ Send.AvgSLrn\ *\ Recv.AvgSLrn}
+
+  \item \texttt{srm\ =\ Send.AvgM\ *\ Recv.AvgM}
+
+  \item \texttt{dwt\ =\ XCAL(srs,\ srm)\ +\ Recv.AvgLLrn\ *\ XCAL(srs,\ Recv.AvgL)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      weight change is sum of two factors: error-driven based on
+      medium-term threshold (srm), and BCM Hebbian based on long-term
+      threshold of the recv unit (Recv.AvgL)
+    \end{itemize}
+	
+  \item
+    XCAL is the "check mark" linearized BCM-style learning function that was derived from the Urakubo Et Al (2008) STDP model, as described in more detail in the CCN Textbook: \url{https://CompCogNeuro.org}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      \texttt{XCAL(x,\ th)\ =\ (x\ \textless{}\ DThr)\ ?\ 0\ :\ (x\ \textgreater{}\ th\ *\ DRev)\ ?\ (x\ -\ th)\ :\ (-x\ *\ ((1-DRev)/DRev))}
+    \item
+      DThr = 0.0001, DRev = 0.1 defaults, and x ? y : z terminology is C
+      syntax for: if x is true, then y, else z
+    \end{itemize}
+	
+  \item \texttt{DWt\ *=\ (DWt\ \textgreater{}\ 0)\ ?\ Wb.Inc\ *\ (1-LWt)\ :\ Wb.Dec\ *\ LWt}
+	
+    \begin{itemize}
+	\tightlist
+    \item \texttt{LWt} is the linear, non-contrast enhanced version
+    of the weight value, and \texttt{Wt} is the sigmoidal
+    contrast-enhanced version, which is used for sending netinput to
+    other neurons. One can compute LWt from Wt and vice-versa, but
+    numerical errors can accumulate in going back-and forth more than
+    necessary, and it is generally faster to just store these two weight
+    values.
+    \item
+      soft weight bounding -\/- weight increases exponentially
+      decelerate toward upper bound of 1, and decreases toward lower
+      bound of 0, based on linear, non-contrast enhanced LWt weights.
+      The \texttt{Wb} factors are how the weight balance term shift the
+      overall magnitude of weight increases and decreases.
+    \end{itemize}
+	
+  \item \texttt{LWt\ +=\ DWt}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      increment the linear weights with the bounded DWt term
+    \end{itemize}
+	
+  \item\texttt{Wt\ =\ SIG(LWt)}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      new weight value is sigmoidal contrast enhanced version of linear
+      weight
+    \item
+      \texttt{SIG(w)\ =\ 1\ /\ (1\ +\ (Off\ *\ (1-w)/w)\^{}Gain)}
+    \end{itemize}
+	
+  \item \texttt{DWt\ =\ 0}
+
+    \begin{itemize}
+	\tightlist
+    \item
+      reset weight changes now that they have been applied.
+    \end{itemize}
+\end{itemize}
+
+% \bibliography{ccnlab}
 % use: bibexport -o hip_edl.bib hip_edl_2021.aux to regenerate:
-% \bibliography{hip_edl}
+\bibliography{hip_edl}
 
 \end{document}
