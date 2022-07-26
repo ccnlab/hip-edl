@@ -1,0 +1,75 @@
+\documentclass[11pt]{letter}
+\usepackage[english]{babel}
+\usepackage{times}
+% following is for pdflatex vs. old(dvi) latex
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+    \pdffalse           % we are not running PDFLaTeX
+    \usepackage[dvips]{graphicx}
+\else
+    \pdfoutput=1        % we are running PDFLaTeX
+    \pdftrue
+    \usepackage[pdftex]{graphicx}
+\fi
+\usepackage{one-in-margins}
+
+% tell pdflatex to prefer .pdf files over .png files!!
+\ifpdf
+  \DeclareGraphicsExtensions{.pdf,.eps,.png,.jpg,.mps,.tif}
+\fi
+
+% pick one of the following
+%\address{2016 Alpine Dr\\
+%Boulder, CO  80304\\ 303-448-1810\\}
+
+\address{
+	\hspace{-.25in}\includegraphics[width=3in]{/Users/oreilly/tex/UCDNeuroLogoCMYK}\\
+\vspace*{-.25in}\\
+{\large \bf Randall C. O'Reilly}\\
+Professor\\
+{\bf Departments of Psychology \& Computer Science, Center for Neuroscience}\\
+\rule[1pt]{6.4in}{1pt}\\
+{\scriptsize \begin{tabular}{lll}
+  1544 Newton Ct & \hspace{4.0in} & (530) 757-8870\\
+  Davis, CA 95816 & & Email: oreilly@ucdavis.edu\\
+\end{tabular}}
+\vspace*{-.25in}\\
+}
+
+% for pre-printed letterhead
+%\address{\vspace*{.5in}}
+
+\signature{Randall O'Reilly}
+
+% pre-signed!
+\signature{\vspace{-.5in}\includegraphics[width=1.25in]{/Users/oreilly/tex/ror_sig}\\
+Randall O'Reilly}
+
+% for pre-printed letterhead
+%\signature{Randall O'Reilly\\Associate Professor, Psychology\\
+%  oreilly@psych.colorado.edu}
+
+% to change the date
+% \date{8th December, 2003}
+
+\begin{document}
+
+\begin{letter}
+% replace address of sender here
+{\vspace*{-.25in}}
+
+\opening{\vspace*{.25in}}
+
+We are hereby re-submitting our manuscript, ``Correcting the Hebbian Mistake: Toward a Fully Error-Driven Hippocampus'' for publication in PLoS Computational Biology.  We have extensively revised the manuscript in response to reviewer comments, as detailed in the responses to reviewers document.  We have also included a word doc that tracks the differences between the original submission and this revision, to more easily see what has changed.  We feel that the revision has significantly improved the paper and greatly appreciate the time and effort taken by the reviewers and editor.  Finally, we apologize for the delay in resubmitting this revision, due to the convergence of a number of factors, and appreciate the flexibility in accommodating this delay.
+
+\closing{Sincerely,}
+
+% \cc{someone}
+% \encl{stuff}
+% \ps{postscript}
+
+\end{letter}
+\end{document}
+
+
+
