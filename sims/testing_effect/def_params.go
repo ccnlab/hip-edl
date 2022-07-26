@@ -215,14 +215,6 @@ var ParamSets = params.Sets{
 				}},
 		},
 	}},
-	{Name: "List175", Desc: "list size", Sheets: params.Sheets{
-		"Pat": &params.Sheet{
-			{Sel: "PatParams", Desc: "pattern params",
-				Params: params.Params{
-					"PatParams.ListSize": "175",
-				}},
-		},
-	}},
 	{Name: "List200", Desc: "list size", Sheets: params.Sheets{
 		"Pat": &params.Sheet{
 			{Sel: "PatParams", Desc: "pattern params",
@@ -270,6 +262,38 @@ var ParamSets = params.Sets{
 					"HipParams.CA3Size.Y": "40",
 					"HipParams.CA3Size.X": "40",
 					"HipParams.DGRatio":   "2.236", // 1.5 before
+				}},
+		},
+	}},
+	{Name: "EDL", Desc: "EDL or NoEDL in testing effect", Sheets: params.Sheets{
+		"TE": &params.Sheet{
+			{Sel: "TEParams", Desc: "EDL or NoEDL for testing effect",
+				Params: params.Params{
+					"TEParams.EDL": "true",
+				}},
+		},
+	}},
+	{Name: "NoEDL", Desc: "EDL or NoEDL in testing effect", Sheets: params.Sheets{
+		"TE": &params.Sheet{
+			{Sel: "TEParams", Desc: "EDL or NoEDL for testing effect",
+				Params: params.Params{
+					"TEParams.EDL": "false",
+				}},
+		},
+	}},
+	{Name: "RP", Desc: "Retrieval Practice or Restudy in testing effect", Sheets: params.Sheets{
+		"TE": &params.Sheet{
+			{Sel: "TEParams", Desc: "Retrieval Practice or Restudy in testing effect",
+				Params: params.Params{
+					"TEParams.IsRP": "true",
+				}},
+		},
+	}},
+	{Name: "RS", Desc: "Retrieval Practice or Restudy in testing effect", Sheets: params.Sheets{
+		"TE": &params.Sheet{
+			{Sel: "TEParams", Desc: "Retrieval Practice or Restudy in testing effect",
+				Params: params.Params{
+					"TEParams.IsRP": "false",
 				}},
 		},
 	}},
