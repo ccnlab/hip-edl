@@ -80,7 +80,7 @@ var ParamSets = params.Sets{
 				}},
 			{Sel: "#ECinToDG", Desc: "DG learning is surprisingly critical: maxed out fast, hebbian works best",
 				Params: params.Params{
-					"Prjn.Learn.Learn":       "true", // absolutely essential to have on! learning slow if off.
+					"Prjn.Learn.Learn":       "true", // NoDGLearn key. Set to false for NoDGLearn
 					"Prjn.CHL.Hebb":          "0.2",  // .2 seems good
 					"Prjn.CHL.SAvgCor":       "0.1",  // 0.01 = 0.05 = .1 > .2 > .3 > .4 (listlize 20-100)
 					"Prjn.CHL.MinusQ1":       "true", // dg self err slightly better

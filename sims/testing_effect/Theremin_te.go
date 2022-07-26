@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// hip_bench runs a hippocampus model for testing parameters and new learning ideas
+// Theremin is the latest Leabra hippocampus described in https://doi.org/10.1101/2021.10.29.466546
 package main
 
 import (
@@ -239,7 +239,7 @@ func (ss *Sim) New() {
 	ss.RunStats = &etable.Table{}
 	ss.SimMats = make(map[string]*simat.SimMat)
 	ss.Params = ParamSets // in def_params -- current best params
-	//ss.Params = OrigParamSets // key for original param in Ketz et al. 2013
+	//ss.Params = OrigParamSets // ThetaPhase key for original param in Ketz et al. 2013 (other keys should also be changed)
 	//ss.Params = SavedParamsSets // user-saved gui params
 	ss.RndSeed = 2
 	ss.ViewOn = true
@@ -288,8 +288,8 @@ func (ss *Sim) Defaults() {
 	ss.TE.Defaults()
 	ss.Hip.Defaults()
 	ss.Pat.Defaults()
-	ss.BatchRun = 0        // for initializing envs if using Gui
-	ss.Time.CycPerQtr = 25 // note: key param - 25 seems like it is actually fine?
+	ss.BatchRun = 0 // for initializing envs if using Gui
+	ss.Time.CycPerQtr = 25
 	ss.Update()
 }
 
@@ -351,7 +351,7 @@ func (ss *Sim) SetEnv(trainRP bool) {
 }
 
 func (ss *Sim) ConfigNet(net *leabra.Network) {
-	net.InitName(net, "Hip_bench")
+	net.InitName(net, "Theremin")
 	hp := &ss.Hip
 	in := net.AddLayer4D("Input", hp.ECSize.Y, hp.ECSize.X, hp.ECPool.Y, hp.ECPool.X, emer.Input)
 	ecin := net.AddLayer4D("ECin", hp.ECSize.Y, hp.ECSize.X, hp.ECPool.Y, hp.ECPool.X, emer.Hidden)
@@ -2458,10 +2458,10 @@ func (ss *Sim) ConfigGui() *gi.Window {
 	width := 1600
 	height := 1200
 
-	gi.SetAppName("hip_bench")
+	gi.SetAppName("Theremin")
 	gi.SetAppAbout(`This demonstrates a basic Hippocampus model in Leabra. See <a href="https://github.com/emer/emergent">emergent on GitHub</a>.</p>`)
 
-	win := gi.NewMainWindow("hip_bench", "Hippocampus AB-AC", width, height)
+	win := gi.NewMainWindow("Theremin", "Hippocampus AB-AC", width, height)
 	ss.Win = win
 
 	vp := win.WinViewport2D()
@@ -2818,7 +2818,7 @@ func (ss *Sim) FourFactorRun() {
 					ss.ConfigEnv()
 					ss.StopNow = false
 					ss.PretrainDone = false
-					ss.PreTrain() // NoPretrain key
+					ss.PreTrain() // NoPretrain key, comment out for NoPretrain
 					ss.PretrainDone = true
 					ss.NewRun()
 					ss.Train()
