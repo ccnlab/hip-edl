@@ -2852,7 +2852,7 @@ func (ss *Sim) CmdArgs() {
 	flag.BoolVar(&ss.LogSetParams, "setparams", false, "if true, print a record of each parameter that is set")
 	flag.BoolVar(&ss.SaveWts, "wts", false, "if true, save final weights after each run")
 	flag.BoolVar(&saveCycPatSimLog, "cycpatsimlog", false, "if true, save train cycle similarity log to file")
-	flag.BoolVar(&saveEpcLog, "epclog", true, "if true, save train epoch log to file")
+	flag.BoolVar(&saveEpcLog, "epclog", true, "if true, save test epoch log to file")
 	flag.BoolVar(&saveRunLog, "runlog", false, "if true, save run epoch log to file")
 	flag.BoolVar(&nogui, "nogui", true, "if not passing any other args and want to run nogui, use nogui")
 	flag.Parse()
