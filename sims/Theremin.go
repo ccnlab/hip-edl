@@ -432,6 +432,13 @@ func (ss *Sim) ReConfigNet() {
 		ss.NetView.SetNet(ss.Net)
 		ss.NetView.Update() // issue #41 closed
 	}
+	ss.ConfigTrnCycPatSimLog(ss.TrnCycPatSimLog)
+	ss.ConfigTrnTrlLog(ss.TrnTrlLog)
+	ss.ConfigTrnEpcLog(ss.TrnEpcLog)
+	ss.ConfigTstEpcLog(ss.TstEpcLog)
+	ss.ConfigTstTrlLog(ss.TstTrlLog)
+	ss.ConfigTstCycLog(ss.TstCycLog)
+	ss.ConfigRunLog(ss.RunLog)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -442,21 +449,6 @@ func (ss *Sim) ReConfigNet() {
 func (ss *Sim) Init() {
 	rand.Seed(ss.RndSeed)
 	ss.SetParams("", ss.LogSetParams) // all sheets
-
-	// setting hip size and list size to prevent GUI crash (from TwoFactorRun)
-	if len(os.Args) <= 1 { //GUI
-		tag := ss.Tag
-		usetag := tag
-		if usetag != "" {
-			usetag += "_"
-		}
-		otf := "MedHip"
-		inf := "List020"
-		ss.Tag = usetag + otf + "_" + inf
-		ss.SetParamsSet(otf, "", ss.LogSetParams)
-		ss.SetParamsSet(inf, "", ss.LogSetParams)
-	}
-
 	ss.ReConfigNet()
 	ss.ConfigEnv() // re-config env just in case a different set of patterns was
 	// selected or patterns have been modified etc
@@ -1242,8 +1234,15 @@ func (ss *Sim) LogFileName(lognm string) string {
 func (ss *Sim) LogTrnCycPatSim(dt *etable.Table) {
 	epc := ss.TrainEnv.Epoch.Cur
 	trl := ss.TrainEnv.Trial.Cur
-	params := ss.RunName() // includes tag
-	spltparams := strings.Split(params, "_")
+
+	var spltparams []string
+	if len(os.Args) > 1 {
+		params := ss.RunName() // includes tag
+		spltparams = strings.Split(params, "_")
+	} else {
+		spltparams = append(spltparams, "Default")
+		spltparams = append(spltparams, strconv.Itoa(ss.Pat.ListSize))
+	}
 
 	row := dt.Rows
 	if trl == 0 { // reset at start
@@ -1382,8 +1381,15 @@ func (ss *Sim) LogTrnEpc(dt *etable.Table) {
 
 	epc := ss.TrainEnv.Epoch.Prv           // this is triggered by increment so use previous value
 	nt := float64(ss.TrainEnv.Table.Len()) // number of trials in view
-	params := ss.RunName()                 // includes tag
-	spltparams := strings.Split(params, "_")
+
+	var spltparams []string
+	if len(os.Args) > 1 {
+		params := ss.RunName() // includes tag
+		spltparams = strings.Split(params, "_")
+	} else {
+		spltparams = append(spltparams, "Default")
+		spltparams = append(spltparams, strconv.Itoa(ss.Pat.ListSize))
+	}
 
 	ss.EpcSSE = ss.SumSSE / nt
 	ss.SumSSE = 0
@@ -1652,8 +1658,15 @@ func (ss *Sim) LogTstEpc(dt *etable.Table) {
 	trl := ss.TstTrlLog
 	tix := etable.NewIdxView(trl)
 	epc := ss.TrainEnv.Epoch.Prv // ?
-	params := ss.RunName()       // includes tag
-	spltparams := strings.Split(params, "_")
+
+	var spltparams []string
+	if len(os.Args) > 1 {
+		params := ss.RunName() // includes tag
+		spltparams = strings.Split(params, "_")
+	} else {
+		spltparams = append(spltparams, "Default")
+		spltparams = append(spltparams, strconv.Itoa(ss.Pat.ListSize))
+	}
 
 	if ss.LastEpcTime.IsZero() {
 		ss.EpcPerTrlMSec = 0
@@ -1879,8 +1892,14 @@ func (ss *Sim) LogRun(dt *etable.Table) {
 	}
 	epcix.Idxs = epcix.Idxs[epcix.Len()-nlast:]
 
-	params := ss.RunName() // includes tag
-	spltparams := strings.Split(params, "_")
+	var spltparams []string
+	if len(os.Args) > 1 {
+		params := ss.RunName() // includes tag
+		spltparams = strings.Split(params, "_")
+	} else {
+		spltparams = append(spltparams, "Default")
+		spltparams = append(spltparams, strconv.Itoa(ss.Pat.ListSize))
+	}
 
 	fzero := ss.FirstZero
 	if fzero < 0 {
